@@ -11,11 +11,13 @@ Feature: Test de servicio marvel-api
     Then status 200
 
   Scenario: Crear personaje exitosamente (flujo feliz)
+    * def random = Math.floor(Math.random() * 100000)
+    * def nombre = 'Iron Man ' + random
     Given path username, 'api', 'characters'
     And request
       """
       {
-        "name": "Iron Man",
+        "name": "#(nombre)",
         "alterego": "Tony Stark",
         "description": "Genius billionaire",
         "powers": ["Armor", "Flight"]
@@ -23,7 +25,7 @@ Feature: Test de servicio marvel-api
       """
     When method post
     Then status 201
-    And match response.name == 'Iron Man'
+    And match response.name == nombre
     * def characterId = response.id
 
   Scenario: Crear personaje con nombre duplicado (flujo triste)
